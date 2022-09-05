@@ -30,7 +30,7 @@ const authController = {
         return jwt.sign(
             {
                 id: user.id,
-                isAdmin: user.isAdmin,
+                admin: user.admin,
             },
             process.env.JWT_ACCESS_KEY,
             { expiresIn: "30s" }
@@ -51,7 +51,6 @@ const authController = {
     loginUser: async(req, res)=>{
         try {
             const user = await User.findOne({ username: req.body.username });
-            // console.log(user.id);
             if (!user) {
                 res.status(404).json("Incorrect username");
             }
@@ -90,7 +89,6 @@ const authController = {
             if (err) {
                 console.log(err);
             }
-            console.log(user);
             refreshTokens = refreshTokens.filter((token) => token !== refreshToken);
             const newAccessToken = authController.generateAccessToken(user);
             const newRefreshToken = authController.generateRefreshToken(user);
